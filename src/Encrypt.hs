@@ -6,6 +6,7 @@ import GHC.Num.Integer
 import Data.FiniteField.Base
 import qualified Data.FiniteField.PrimeField as P
 
+-- 公開鍵および秘密鍵のデータ型を定義
 data PublicKey = PublicKey {
     curve :: EllipticCurve, 
     g :: ECPoint,
@@ -34,7 +35,7 @@ encryptString r pk msg = map (encrypt r pk) points
         points = map (\(x, y) -> ECPoint (fromInteger x) (fromInteger y)  (curve pk)) (pairs integers)
         integers = map (toInteger . ord) msg
         pairs [] = []
-        pairs [x] = [(x, 0)]
+        pairs (x:[]) = [(x, 0)]
         pairs (x:y:rest) = (x, y) : (pairs rest)
 
 decryptString :: SecretKey -> [(ECPoint, ECPoint)] -> String

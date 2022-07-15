@@ -4,6 +4,7 @@ module Elliptic (ECPoint(ECPoint, InfinitePoint), EllipticCurve(EllipticCurve), 
 
 import Data
 
+-- 楕円を表現するデータ型
 data EllipticCurve = EllipticCurve { 
     a :: Integer,
     b :: Integer
@@ -18,11 +19,11 @@ apply (EllipticCurve {a, b}) (ECPoint{x, y, curve}) = x * x * x + (fromInteger a
 discriminant :: GField -> GField -> GField
 discriminant a b = 4 * a * a * a + 27 * b * b
 
+-- 楕円上の座標を表現
 data ECPoint = InfinitePoint | ECPoint {
     x :: GField,
     y :: GField,
     curve:: EllipticCurve
-
 }
 
 instance Show ECPoint where
@@ -33,7 +34,6 @@ instance Eq ECPoint where
     InfinitePoint == ECPoint _ _ _ = False
     InfinitePoint == InfinitePoint = True
     ECPoint x1 y1 _ == ECPoint x2 y2 _ = (x1, y1) == (x2, y2)
-
 
 instance Num ECPoint where
     (+) = add

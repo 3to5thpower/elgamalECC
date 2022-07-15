@@ -9,19 +9,19 @@ import Elliptic
 
 
 rand :: IO Integer
-rand = getStdRandom $ randomR (1000, 9999)
+rand = getStdRandom $ randomR range
 
 generateEllipticCurve :: IO EllipticCurve
 generateEllipticCurve = do
-    as <- (map fromInteger) <$> randomRs (1000, 9999) <$> initStdGen
-    bs <- (map fromInteger) <$> randomRs (1000, 9999) <$> initStdGen
+    as <- (map fromInteger) <$> randomRs range <$> initStdGen
+    bs <- (map fromInteger) <$> randomRs range <$> initStdGen
     let [(a, b)] = take 1 [(a, b) | a <- as, b <- bs, discriminant a b /= (fromInteger 0)]
     return $ EllipticCurve (P.toInteger a) (P.toInteger b)
 
 generateBasePoint :: EllipticCurve -> IO ECPoint
 generateBasePoint curve = do
-    xs <- (map fromInteger) <$> randomRs (1000, 9999) <$> initStdGen
-    ys <- (map fromInteger) <$> randomRs (1000, 9999) <$> initStdGen
+    xs <- (map fromInteger) <$> randomRs range <$> initStdGen
+    ys <- (map fromInteger) <$> randomRs range <$> initStdGen
     let [(x, y)] = take 1 [(x, y) | x <- xs, y <- ys, apply curve (ECPoint x y curve) /= (fromInteger 0)]
     return $ ECPoint x y curve
 

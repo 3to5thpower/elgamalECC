@@ -3,7 +3,7 @@
 
 module Data(GField, prime, range) where
 
-import Data.FiniteField.PrimeField
+import Data.FiniteField.PrimeField ( primeField )
 
 -- 位数pを99971とする
 prime = 99971

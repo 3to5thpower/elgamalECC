@@ -1,4 +1,4 @@
-module Encrypt (PublicKey (PublicKey), SecretKey, encryptString, decryptString) where
+module Encrypt (PublicKey (PublicKey, g, key), SecretKey, encryptString, decryptString, encrypt, decrypt) where
 
 import Data.Char
 import Data.FiniteField.Base
@@ -17,6 +17,7 @@ type SecretKey = Integer
 
 instance Show PublicKey where
     show (PublicKey curve g key) = show key ++ ", 楕円曲線が " ++ show curve ++ ", 生成元Gは" ++ show g
+
 
 -- encrypt function required random gfield value r
 encrypt :: Integer -> PublicKey -> ECPoint -> (ECPoint, ECPoint)

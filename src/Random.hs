@@ -1,4 +1,4 @@
-module Random (generateKeys, rand) where
+module Random (generateKeys, rand, generateEllipticCurve, generateBasePoint) where
 
 import System.Random
 import Data
@@ -17,8 +17,6 @@ generateEllipticCurve = do
     randoms <- map fromInteger . randomRs range <$> initStdGen
     let Just(a, b) = find (\(a, b) -> discriminant a b /= 0 && a /= b) [(a, b) | a <- randoms, b <- randoms]
     return $ EllipticCurve (P.toInteger a) (P.toInteger b)
-    -- where
-        -- findPair a b = if discriminant a b /= 0 then return (a, b) else 
 
 generateBasePoint :: EllipticCurve -> IO ECPoint
 generateBasePoint curve = do
@@ -32,4 +30,4 @@ generateKeys = do
     basePoint <- generateBasePoint curve
     sk <- rand
     let pk = PublicKey curve basePoint (scalaMul sk basePoint)
-    return $ (pk, sk)
+    return (pk, sk)

@@ -1,0 +1,32 @@
+name: Haskell
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: haskell/actions/setup@v1
+        with:
+          ghc-version: "9.0.2"
+          enable-stack: true
+          stack-version: "latest"
+      - name: Cache .stack
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.local/bin
+            ~/.stack
+          key: ${{ runner.os }}-stack-${{ hashFiles('**/stack.yaml.lock') }}-v1
+
+      - name: install dependencies
+        run: stack --system-ghc build --only-dependencies
+      - name: test
+        run: stack --system-ghc build --test

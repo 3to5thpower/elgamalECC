@@ -1,5 +1,7 @@
 # elgamalECC
 
+[![Haskell](https://github.com/3to5thpower/elgamalECC/actions/workflows/haskell.yml/badge.svg)](https://github.com/3to5thpower/elgamalECC/actions/workflows/haskell.yml)
+
 The Practice Implementation of EC Elgamal Encryption.
 
 ## Requirements

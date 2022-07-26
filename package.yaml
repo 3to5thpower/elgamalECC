@@ -53,3 +53,6 @@ tests:
       - -XDataKinds
     dependencies:
       - elgamalECC
+      - hspec
+      - QuickCheck
+      - mtl

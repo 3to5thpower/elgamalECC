@@ -6,6 +6,7 @@ import Data.FiniteField.Base
 import qualified Data.FiniteField.PrimeField as P
 import Encrypt
 import Elliptic
+import Data.List ( find )
 
 
 rand :: IO Integer
@@ -13,16 +14,16 @@ rand = getStdRandom $ randomR range
 
 generateEllipticCurve :: IO EllipticCurve
 generateEllipticCurve = do
-    as <- map fromInteger . randomRs range <$> initStdGen
-    bs <- map fromInteger . randomRs range <$> initStdGen
-    let [(a, b)] = take 1 [(a, b) | a <- as, b <- bs, discriminant a b /= 0]
+    randoms <- map fromInteger . randomRs range <$> initStdGen
+    let Just(a, b) = find (\(a, b) -> discriminant a b /= 0 && a /= b) [(a, b) | a <- randoms, b <- randoms]
     return $ EllipticCurve (P.toInteger a) (P.toInteger b)
+    -- where
+        -- findPair a b = if discriminant a b /= 0 then return (a, b) else 
 
 generateBasePoint :: EllipticCurve -> IO ECPoint
 generateBasePoint curve = do
-    xs <- map fromInteger . randomRs range <$> initStdGen
-    ys <- map fromInteger . randomRs range <$> initStdGen
-    let [(x, y)] = take 1 [(x, y) | x <- xs, y <- ys, apply curve (ECPoint x y curve) /= 0]
+    randoms <- map fromInteger . randomRs range <$> initStdGen
+    let Just(x, y) = find (\(x, y) -> apply (ECPoint x y curve) == 0)  [(x, y) | x <- randoms, y <- randoms]
     return $ ECPoint x y curve
 
 generateKeys :: IO (PublicKey, SecretKey)

@@ -14,9 +14,9 @@ instance Show EllipticCurve where
     show (EllipticCurve a b) = "y^2 = x^3 + " ++ show a ++ "x + " ++ show b
 
 -- 方程式の値(x^3+ax+b-y^2)を求める
-apply :: EllipticCurve -> ECPoint -> GField
-apply (EllipticCurve {a, b}) (ECPoint{x, y, curve}) = x * x * x + fromInteger a * x + fromInteger b - y * y
-apply (EllipticCurve {a, b}) InfinitePoint = undefined
+apply :: ECPoint -> GField
+apply (ECPoint x y EllipticCurve{a, b}) = x * x * x + fromInteger a * x + fromInteger b - y * y
+apply InfinitePoint = undefined
 
 -- 判別式
 discriminant :: GField -> GField -> GField
@@ -32,7 +32,7 @@ data ECPoint = InfinitePoint | ECPoint {
 -- ECPointの文字表示形式を定義
 instance Show ECPoint where
     show (ECPoint x y _) = "(" ++ show x ++ ", " ++ show y ++ ")"
-    show InfinitePoint = undefined
+    show InfinitePoint = "無限遠点"
 
 --ECPointの等価演算を定義
 instance Eq ECPoint where
